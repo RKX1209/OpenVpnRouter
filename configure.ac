@@ -29,9 +29,7 @@ AS_IF([test "x$with_debug" = "xyes"],
     [AC_DEFINE(CONFIG_DEBUG, 1, [Define if you need to enable debug mode])]
     )
 
-AC_CONFIG_FILES([
-Makefile
-protocol/Makefile])
+AC_CONFIG_FILES([Makefile])
 
 AC_OUTPUT
 

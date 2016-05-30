@@ -713,6 +713,7 @@ ac_user_opts='
 enable_option_checking
 enable_silent_rules
 enable_dependency_tracking
+with_debug
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1343,6 +1344,11 @@ Optional Features:
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-debug            enable debug mode
 
 Some influential environment variables:
   CC          C compiler command
@@ -4217,7 +4223,24 @@ fi
 done
 
 
-ac_config_files="$ac_config_files Makefile protocol/Makefile"
+# Check if we should enable debug mode.
+
+# Check whether --with-debug was given.
+if test "${with_debug+set}" = set; then :
+  withval=$with_debug; with_debug=yes
+else
+  with_debug=no
+fi
+
+
+if test "x$with_debug" = "xyes"; then :
+
+$as_echo "#define CONFIG_DEBUG 1" >>confdefs.h
+
+
+fi
+
+ac_config_files="$ac_config_files Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -4948,7 +4971,6 @@ do
     "include/config.h") CONFIG_HEADERS="$CONFIG_HEADERS include/config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "protocol/Makefile") CONFIG_FILES="$CONFIG_FILES protocol/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -5675,3 +5697,12 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}:
+Building:
+  debug mode:           $with_debug
+" >&5
+$as_echo "$as_me:
+Building:
+  debug mode:           $with_debug
+" >&6;};

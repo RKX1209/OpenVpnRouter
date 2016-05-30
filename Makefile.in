@@ -102,7 +102,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_vrouter_OBJECTS = vrouter-router.$(OBJEXT) vrouter-util.$(OBJEXT)
+am_vrouter_OBJECTS = vrouter-ethernet.$(OBJEXT) vrouter-ipv4.$(OBJEXT) \
+	vrouter-router.$(OBJEXT) vrouter-util.$(OBJEXT)
 vrouter_OBJECTS = $(am_vrouter_OBJECTS)
 vrouter_LDADD = $(LDADD)
 vrouter_LINK = $(CCLD) $(vrouter_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
@@ -274,7 +275,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-vrouter_SOURCES = router.c util.c
+vrouter_SOURCES = protocol/ethernet.c protocol/ipv4.c router.c util.c
 vrouter_CFLAGS = -Wall -fexceptions -fstack-protector-all -D_FORTIFY_SOURCE=2 -I./include
 all: all-am
 
@@ -381,6 +382,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vrouter-ethernet.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vrouter-ipv4.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vrouter-router.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vrouter-util.Po@am__quote@
 
@@ -397,6 +400,34 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+vrouter-ethernet.o: protocol/ethernet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -MT vrouter-ethernet.o -MD -MP -MF $(DEPDIR)/vrouter-ethernet.Tpo -c -o vrouter-ethernet.o `test -f 'protocol/ethernet.c' || echo '$(srcdir)/'`protocol/ethernet.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/vrouter-ethernet.Tpo $(DEPDIR)/vrouter-ethernet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protocol/ethernet.c' object='vrouter-ethernet.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -c -o vrouter-ethernet.o `test -f 'protocol/ethernet.c' || echo '$(srcdir)/'`protocol/ethernet.c
+
+vrouter-ethernet.obj: protocol/ethernet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -MT vrouter-ethernet.obj -MD -MP -MF $(DEPDIR)/vrouter-ethernet.Tpo -c -o vrouter-ethernet.obj `if test -f 'protocol/ethernet.c'; then $(CYGPATH_W) 'protocol/ethernet.c'; else $(CYGPATH_W) '$(srcdir)/protocol/ethernet.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/vrouter-ethernet.Tpo $(DEPDIR)/vrouter-ethernet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protocol/ethernet.c' object='vrouter-ethernet.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -c -o vrouter-ethernet.obj `if test -f 'protocol/ethernet.c'; then $(CYGPATH_W) 'protocol/ethernet.c'; else $(CYGPATH_W) '$(srcdir)/protocol/ethernet.c'; fi`
+
+vrouter-ipv4.o: protocol/ipv4.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -MT vrouter-ipv4.o -MD -MP -MF $(DEPDIR)/vrouter-ipv4.Tpo -c -o vrouter-ipv4.o `test -f 'protocol/ipv4.c' || echo '$(srcdir)/'`protocol/ipv4.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/vrouter-ipv4.Tpo $(DEPDIR)/vrouter-ipv4.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protocol/ipv4.c' object='vrouter-ipv4.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -c -o vrouter-ipv4.o `test -f 'protocol/ipv4.c' || echo '$(srcdir)/'`protocol/ipv4.c
+
+vrouter-ipv4.obj: protocol/ipv4.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -MT vrouter-ipv4.obj -MD -MP -MF $(DEPDIR)/vrouter-ipv4.Tpo -c -o vrouter-ipv4.obj `if test -f 'protocol/ipv4.c'; then $(CYGPATH_W) 'protocol/ipv4.c'; else $(CYGPATH_W) '$(srcdir)/protocol/ipv4.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/vrouter-ipv4.Tpo $(DEPDIR)/vrouter-ipv4.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='protocol/ipv4.c' object='vrouter-ipv4.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -c -o vrouter-ipv4.obj `if test -f 'protocol/ipv4.c'; then $(CYGPATH_W) 'protocol/ipv4.c'; else $(CYGPATH_W) '$(srcdir)/protocol/ipv4.c'; fi`
 
 vrouter-router.o: router.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(vrouter_CFLAGS) $(CFLAGS) -MT vrouter-router.o -MD -MP -MF $(DEPDIR)/vrouter-router.Tpo -c -o vrouter-router.o `test -f 'router.c' || echo '$(srcdir)/'`router.c

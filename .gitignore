@@ -33,6 +33,10 @@
 
 # Autotools
 *.log
+compile
+depcomp
+missing
+autom4te.cache/
 
 # Emacs
 *~

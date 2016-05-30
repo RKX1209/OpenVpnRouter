@@ -10,6 +10,8 @@
 #include <netinet/ip_icmp.h>
 #include <pthread.h>
 #include "util.h"
+#include "ethernet.h"
+#include "ipv4.h"
 
 #define DEVICE_NUM 2
 #define get_opposite_dev(x) (!x)
@@ -21,6 +23,7 @@ typedef struct {
 DEVICE device[DEVICE_NUM];
 
 static int analyze_packet(int device_no, u_char *data, int size);
+char *ether_ntoa(u_char *hwaddr, char *buf, socklen_t size);
 
 int router() {
   struct pollfd targets[DEVICE_NUM];
@@ -96,7 +99,7 @@ static int analyze_packet(int device_no, u_char *data, int size) {
   ptr += sizeof(struct ether_header);
   lest -= sizeof(struct ether_header);
   if (memcmp(&eh->ether_dhost, device[device_no].hwaddr, 6) != 0) {
-    debug_printf("[%d]:dhost not match %s\n", device_no,ether_ntoa((u_char*)&eh->ether_dhost, buf, sizeof(buf)));
+    debug_printf("[%d]:dhost not match %s\n", device_no, ether_ntoa((u_char*)&eh->ether_dhost, buf, sizeof(buf)));
     return -1;
   }
   #ifdef CONFIG_DEBUG
