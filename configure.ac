@@ -20,8 +20,22 @@ AC_CHECK_HEADERS([arpa/inet.h string.h sys/ioctl.h sys/socket.h unistd.h])
 # Checks for library functions.
 AC_CHECK_FUNCS([inet_ntoa memset socket strerror])
 
+# Check if we should enable debug mode.
+AC_ARG_WITH([debug],
+  AC_HELP_STRING([--with-debug],[enable debug mode]),
+  [with_debug=yes],[with_debug=no])
+
+AS_IF([test "x$with_debug" = "xyes"],
+    [AC_DEFINE(CONFIG_DEBUG, 1, [Define if you need to enable debug mode])]
+    )
+
 AC_CONFIG_FILES([
 Makefile
 protocol/Makefile])
 
 AC_OUTPUT
+
+AC_MSG_NOTICE([
+Building:
+  debug mode:           $with_debug
+]);
