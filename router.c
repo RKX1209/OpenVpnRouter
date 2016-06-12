@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
   }
   in_dev = argv[1];
   out_dev = argv[2];
-  inet_aton(next_router_s, &next_router_s);
+  inet_aton(next_router_s, &next_router);
   debug_printf("NextRouter=%s\n", _inet_ntoa_r(&next_router, buf, sizeof(buf)));
 
   if (get_device_info(in_dev, device[0].hwaddr, &device[0].addr,
@@ -80,17 +80,18 @@ int main(int argc, char *argv[]) {
     debug_printf("GetDeviceInfo:error:%s\n", in_dev);
     return -1;
   }
+
   if ((device[0].soc = init_raw_socket(in_dev, 1, 0)) == -1) {
-    debug_printf("init_raw_socket:error:%s\n",in_dev);
+    debug_printf("InitRawSocket:error:%s\n",in_dev);
     return -1;
   }
-  if (get_device_info(in_dev, device[1].hwaddr, &device[1].addr,
+  if (get_device_info(out_dev, device[1].hwaddr, &device[1].addr,
                       &device[1].subnet, &device[1].netmask) == -1) {
     debug_printf("GetDeviceInfo:error:%s\n", out_dev);
     return -1;
   }
   if ((device[1].soc = init_raw_socket(out_dev, 1, 0)) == -1) {
-    debug_printf("init_raw_socket:error:%s\n",out_dev);
+    debug_printf("InitRawSocket:error:%s\n",out_dev);
     return -1;
   }
 
@@ -219,13 +220,15 @@ static int analyze_packet(int device_no, u_char *data, int size) {
       /* Same subnet network */
       IP2MAC *ip2mac;
       debug_printf("[%d]:%s to target segment\n", device_no, in_addr_t2str(iphdr->daddr, buf, sizeof(buf)));
-      if (iphdr->daddr == device[tno].addr.s_addr) {
+      debug_printf("[%d]:%s\n",device_no, in_addr_t2str(device[device_no].addr.s_addr, buf, sizeof(buf)));
+
+      if (iphdr->daddr == device[device_no].addr.s_addr) {
         debug_printf("[%d]:recv:myaddr\n",device_no);
         return 1;
       }
       ip2mac = ip_2_mac(tno, iphdr->daddr, NULL);
       if (ip2mac->flag == FLAG_NG || ip2mac->sd.dno != 0) {
-        debug_printf("[%d]]Ip2Mac: error or sending\n", device_no);
+        debug_printf("[%d]Ip2Mac: error or sending\n", device_no);
         append_send_data(ip2mac, 1, iphdr->daddr, data, size);
         return -1;
       }

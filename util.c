@@ -11,6 +11,7 @@
 #include <arpa/inet.h>
 #include <config.h>
 #include "util.h"
+#include "ipv4.h"
 
 int init_raw_socket(char *device, int promisc, int ip_only) {
   struct ifreq ifreq;
@@ -72,12 +73,14 @@ int get_device_info(char *device, u_char hwaddr[6], struct in_addr *uaddr,
   struct sockaddr_in addr;
   int soc;
   u_char *p;
+  char buf[80];
   if ((soc = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
     debug_perror("socket");
     return -1;
   }
   memset(&ifreq, 0, sizeof(ifreq));
   strncpy(ifreq.ifr_name, device, sizeof(ifreq.ifr_name) - 1);
+
   if (ioctl(soc, SIOCGIFHWADDR, &ifreq) == -1) {
     debug_perror("ioctl");
     close(soc);
@@ -86,6 +89,7 @@ int get_device_info(char *device, u_char hwaddr[6], struct in_addr *uaddr,
     p = (u_char*)&ifreq.ifr_hwaddr.sa_data;
     memcpy(hwaddr, p, 6);
   }
+
   if (ioctl(soc, SIOCGIFADDR, &ifreq) == -1) {
     debug_perror("ioctl");
     close(soc);
@@ -97,6 +101,7 @@ int get_device_info(char *device, u_char hwaddr[6], struct in_addr *uaddr,
   } else {
     memcpy(&addr, &ifreq.ifr_addr, sizeof(struct sockaddr_in));
     *uaddr = addr.sin_addr;
+    //debug_printf("get device %s\n",in_addr_t2str(uaddr->s_addr,buf,sizeof(buf)));
   }
 
   if (ioctl(soc, SIOCGIFNETMASK, &ifreq) == -1) {
@@ -105,7 +110,7 @@ int get_device_info(char *device, u_char hwaddr[6], struct in_addr *uaddr,
     return -1;
   } else {
     memcpy(&addr, &ifreq.ifr_addr, sizeof(struct sockaddr_in));
-    *uaddr = addr.sin_addr;
+    *mask = addr.sin_addr;
   }
   subnet->s_addr = ((uaddr->s_addr) & (mask->s_addr));
   close(soc);
