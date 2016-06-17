@@ -32,6 +32,7 @@ int router() {
   targets[0].events = POLLIN | POLLERR;
   targets[1].fd = device[1].soc;
   targets[1].events = POLLIN | POLLERR;
+
   while(1) {
     switch(status = poll(targets, DEVICE_NUM, 100)) {
       case -1:
@@ -106,6 +107,7 @@ int main(int argc, char *argv[]) {
   signal(SIGTTIN, SIG_IGN);
   signal(SIGTTOU, SIG_IGN);
 
+  IP2MAC *ip2mac = ip_2_mac(get_opposite_dev(0), next_router.s_addr, NULL);
   debug_printf("router start\n");
   router();
   debug_printf("router end\n");
@@ -210,21 +212,25 @@ static int analyze_packet(int device_no, u_char *data, int size) {
       return -1;
     }
     if (iphdr->ttl - 1 == 0) {
-      /* TTL have expired. Router must notice edge user it by ICMP. */
+      /* TTL has expired. Router must notice edge user it by ICMP. */
       debug_printf("[%d]: iphdr->ttl == 0 error\n",device_no);
       send_icmp_time_exceeded(device_no, eh, iphdr, data, size);
       return -1;
     }
     tno = get_opposite_dev(device_no);
+    debug_printf("[%d] %s -> ",device_no,in_addr_t2str(iphdr->saddr, buf, sizeof(buf)));
+    debug_printf("%s\n",in_addr_t2str(iphdr->daddr, buf, sizeof(buf)));
+    // debug_printf("[%d] %s\n", device_no, in_addr_t2str(device[tno].netmask.s_addr, buf, sizeof(buf)));
+    // debug_printf("[%d] subnet:%s\n", device_no, in_addr_t2str(device[tno].subnet.s_addr, buf, sizeof(buf)));
     if ((iphdr->daddr & device[tno].netmask.s_addr) == device[tno].subnet.s_addr) {
       /* Same subnet network */
       IP2MAC *ip2mac;
       debug_printf("[%d]:%s to target segment\n", device_no, in_addr_t2str(iphdr->daddr, buf, sizeof(buf)));
       debug_printf("[%d]:%s\n",device_no, in_addr_t2str(device[device_no].addr.s_addr, buf, sizeof(buf)));
 
-      if (iphdr->daddr == device[device_no].addr.s_addr) {
+      if (iphdr->daddr == device[tno].addr.s_addr) {
         debug_printf("[%d]:recv:myaddr\n",device_no);
-        return 1;
+        return -1;
       }
       ip2mac = ip_2_mac(tno, iphdr->daddr, NULL);
       if (ip2mac->flag == FLAG_NG || ip2mac->sd.dno != 0) {
@@ -237,7 +243,9 @@ static int analyze_packet(int device_no, u_char *data, int size) {
       }
     }
     else {
+      /* Differenct subnet network */
       IP2MAC *ip2mac;
+      debug_printf("[%d]:%s to different segment\n", device_no, in_addr_t2str(iphdr->daddr, buf, sizeof(buf)));
       ip2mac = ip_2_mac(tno, next_router.s_addr, NULL);
       if (ip2mac->flag == FLAG_NG || ip2mac->sd.dno != 0) {
         debug_printf("[%d]:Ip2Mac: error or sending\n", device_no);

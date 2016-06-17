@@ -5,7 +5,7 @@
 #include <netinet/in.h>
 #include "util.h"
 
-#define IP2MAC_TIMEOUT_SEC  60
+#define IP2MAC_TIMEOUT_SEC  600
 #define IP2MAC_NG_TIMEOUT_SEC 1
 #define MAX_BUCKET_SIZE 1024
 #define FLAG_FREE 0

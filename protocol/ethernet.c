@@ -267,7 +267,7 @@ int buffer_send() {
 
     pthread_mutex_lock(&send_req.mutex);
     if ((status = pthread_cond_timedwait(&send_req.cond, &send_req.mutex, &timeout)) != 0) {
-      debug_printf("pthread_cond_timedwait:%s\n", strerror(status));
+      //debug_printf("pthread_cond_timedwait:%s\n", strerror(status));
     }
     pthread_mutex_unlock(&send_req.mutex);
 
