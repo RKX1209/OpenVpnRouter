@@ -5,11 +5,6 @@
 #include "ipv4.h"
 #include "util.h"
 
-char *_inet_ntoa(struct in_addr *addr, char *buf, socklen_t size) {
-  inet_ntop(PF_INET, addr, buf, size);
-  return buf;
-}
-
 char *_inet_ntoa_r(struct in_addr *addr, char *buf, socklen_t size) {
   inet_ntop(PF_INET, addr, buf, size);
   return buf;
