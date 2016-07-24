@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include <stdarg.h>
@@ -202,4 +203,12 @@ int debug_perror(char *msg) {
   fprintf(stderr, "%s: %s\n", msg, strerror(errno));
   #endif
   return 0;
+}
+
+int exit_error(const char *msg, ...) {
+  va_list args;
+  va_start(args, msg);
+  vfprintf(stderr, msg, args);
+  va_end(args);
+  exit(EXIT_FAILURE);
 }

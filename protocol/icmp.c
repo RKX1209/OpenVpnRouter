@@ -2,6 +2,8 @@
 #include <netinet/if_ether.h>
 #include <netinet/ip.h>
 #include <net/ethernet.h>
+#include <unistd.h>
+#include <string.h>
 #include "util.h"
 #include "icmp.h"
 

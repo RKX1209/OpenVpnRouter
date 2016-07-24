@@ -17,5 +17,6 @@ u_int16_t checksum(u_char *data, int len);
 u_int16_t checksum2(u_char *data1, int len1, u_char *data2, int len2);
 int debug_printf(char *fmt, ...);
 int debug_perror(char *msg);
+int exit_error(const char *msg, ...);
 
 #endif
