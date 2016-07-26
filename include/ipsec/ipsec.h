@@ -2,9 +2,9 @@
 #define __IPSEC_H__
 
 #include <linux/pfkeyv2.h>
-enum kernel_interface {
-  EOF, USE_NETKEY, NO_KERNEL,
-};
+
+enum kernel_interface { NOP, USE_NETKEY, NO_KERNEL };
+
 extern enum kernel_interface k_interface;
 
 struct kernel_ops {
@@ -18,5 +18,7 @@ struct kernel_ops {
 #define K_SADB_AALG_MAX   255
 #define K_SADB_EALG_MAX   255
 extern struct kernel_ops *k_ops;
+extern void init_ipsec(void);
 extern pid_t pid;
+
 #endif

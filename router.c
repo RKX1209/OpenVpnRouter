@@ -11,6 +11,7 @@
 #include "ipv4.h"
 #include "icmp.h"
 #include "util.h"
+#include "ipsec/ipsec.h"
 
 DEVICE device[DEVICE_NUM];
 
@@ -48,11 +49,7 @@ int router() {
             if ((size = read(device[i].soc, buf, sizeof(buf))) <= 0) {
               perror("cannnot read device");
             } else {
-              if (analyze_packet(i, buf, size) != -1) {
-                if ((size = write(device[get_opposite_dev(i)].soc, buf, size)) <= 0) {
-                  perror("cannnot write device");
-                }
-              }
+              analyze_packet(i, buf, size);
             }
           }
         }
@@ -106,6 +103,8 @@ int main(int argc, char *argv[]) {
   signal(SIGPIPE, SIG_IGN);
   signal(SIGTTIN, SIG_IGN);
   signal(SIGTTOU, SIG_IGN);
+
+  init_ipsec(); //Initialize IPsec
 
   IP2MAC *ip2mac = ip_2_mac(get_opposite_dev(0), next_router.s_addr, NULL);
   debug_printf("router start\n");
