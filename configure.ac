@@ -25,6 +25,11 @@ AC_ARG_WITH([debug],
   AC_HELP_STRING([--with-debug],[enable debug mode]),
   [with_debug=yes],[with_debug=no])
 
+# Check which pfkey interface is used.
+AC_ARG_WITH([netkey],
+  AC_HELP_STRING([--with-netkey],[enable netkey mode]),
+  [with_netkey=yes],[with_netkey=no])
+
 AS_IF([test "x$with_debug" = "xyes"],
     [AC_DEFINE(CONFIG_DEBUG, 1, [Define if you need to enable debug mode])]
     )
